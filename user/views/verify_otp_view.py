@@ -27,3 +27,14 @@ class VerifyOtpView(APIView):
                 return Response({"msg" : "OTP does not match"}, status = 400)
         else:
             return Response({"msg" : "Invalid email"}, status = 400)
+
+
+
+
+
+# Sign up  --- table - email, password, otp_verified False
+# Otp verify -- emial and otp, otp_verified = True
+# login - 
+
+
+

@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from user.serializer import LoginRequest
 from user.models import User
+from rest_framework.authtoken.models import Token
 
 
 class UserLoginView(APIView):
@@ -22,7 +23,9 @@ class UserLoginView(APIView):
             if user_instance.otp_verified:
                 password_check = user_instance.check_password(password)
                 if password_check:
-                    return Response({"msg" : "login success"}, status = 200)
+                    token, created = Token.objects.get_or_create(user = user_instance)
+                    print(token)
+                    return Response({"key" : token.key}, status = 200)
                 else:
                     return Response({"msg" : "Invalid password"}, status = 400)
             else:
