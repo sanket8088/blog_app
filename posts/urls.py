@@ -16,3 +16,5 @@ urlpatterns = [
 # 2. define an APi to get certain user data
 
 # 127.0.0.1:8000/api/v1/posts/user/<user_id> - All the posts done by user_id = 3
+
+
