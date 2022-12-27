@@ -1,5 +1,6 @@
 from django.urls import path
-from user.views import UserSignUpView, UserLoginView, VerifyOtpView, FetchUserView, AddressView
+from user.views import (UserSignUpView, UserLoginView, VerifyOtpView, FetchUserView, 
+                            AddressView, AddressDefaultView)
 
 
 urlpatterns = [
@@ -8,6 +9,7 @@ urlpatterns = [
     path('login', UserLoginView.as_view()),
     path('verify/otp', VerifyOtpView.as_view()),
     path('address', AddressView.as_view()),
+    path('address/<int:address_id>/default', AddressDefaultView.as_view()),
 ]
 
 # uuid
