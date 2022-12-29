@@ -1,9 +1,13 @@
 from django.urls import path
-from products.views import FetchAllCategoriesView
+from products.views import (FetchAllCategoriesView, FetchAllProductsCategoryView, AddProductToCartView,
+                            FetchCartDataView)
 
 
 urlpatterns = [
     path('category', FetchAllCategoriesView.as_view()),
+    path('category/<int:category_id>/product', FetchAllProductsCategoryView.as_view()),
+    path('product/<int:product_id>/cart', AddProductToCartView.as_view()),
+    path('cart', FetchCartDataView.as_view()),
 ]
 
 # uuid

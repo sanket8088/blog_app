@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from user.serializer import AddressRequest
-from products.models import Categories
+from products.models import Categories, Products
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
 from django.core.paginator import Paginator
@@ -12,18 +12,24 @@ from django.core.paginator import Paginator
 # provide a nickname to address
 
 
-class FetchAllCategoriesView(APIView):
+class FetchAllProductsCategoryView(APIView):
     """Add address for user"""
     permission_classes = [(IsAuthenticated)]
 
-    def get(self, request):
+    def get(self, request, category_id):
         user = request.user
-        category_qs = Categories.objects.filter(is_deleted = False)
+        category_qs = Products.objects.filter(is_deleted = False, category_id = category_id )
         page = request.GET.get("p", 1)
         psz = request.GET.get("psz", 10)
         name = request.GET.get("name", None)
+        price_st = request.GET.get("price_st", None)
+        price_end = request.GET.get("price_end", None)
         if name:
            category_qs = category_qs.filter(name__icontains=name)
+        if price_st:
+            category_qs = category_qs.filter(price__gte=int(price_st))
+        if price_end:
+            category_qs = category_qs.filter(price__lte=int(price_end))
         paginator_object = Paginator(category_qs, psz) #get total context of data, count, total_page_number
         object_list = paginator_object.page(page) #actual data of paginated form
         page_info = {"count" : paginator_object.count, "total_pages" : paginator_object.num_pages, "cur_page" : page}
@@ -38,7 +44,7 @@ class FetchAllCategoriesView(APIView):
 
         resp = []
         for data in object_list:
-            resp.append({"id" : data.id, "name" : data.name, "description" : data.description})
+            resp.append({"id" : data.id, "name" : data.name, "price" : data.price})
             
         return Response({"page_info" : page_info, "data" : resp}, status = 200)
 
